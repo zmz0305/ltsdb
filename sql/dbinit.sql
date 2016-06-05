@@ -1,5 +1,7 @@
-CREATE DATABASE `lts`;
+CREATE DATABASE IF NOT EXISTS `lts`;
 USE `lts`;
+
+SET FOREIGN_KEY_CHECKS=0;
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
@@ -23,7 +25,8 @@ CREATE TABLE `users` (
 
 DROP TABLE IF EXISTS `posts`;
 CREATE TABLE `posts` (
-	`rowid` int(11) NOT NULL AUTO_INCREMENT,
+  `rowid` int(11) NOT NULL AUTO_INCREMENT,
+    `owner_id` int(11) NOT NULL,
     `url` varchar(256) NOT NULL,
     `address` varchar(256) NOT NULL,
     `num_bedroom` int(11) NOT NULL,
@@ -32,8 +35,21 @@ CREATE TABLE `posts` (
     `state` varchar(15) NOT NULL,
     `city` varchar(30) NOT NULL,
     `school` varchar(128) DEFAULT NULL,
-	`zip` int(11) NOT NULL,
-
+  `zip` int(11) NOT NULL,
+  CONSTRAINT `post_owner_fk` FOREIGN KEY `owner_id_fk`(`owner_id`) REFERENCES `users`(`rowid`) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (`rowid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `pictures`;
+CREATE TABLE `pictures` (
+  `rowid` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `post_id` int(11) NOT NULL,
+  `path` varchar(256) NOT NULL,
+  CONSTRAINT `pic_post_fk` FOREIGN KEY `post_id_fk`(`post_id`) REFERENCES `posts`(`rowid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+SET FOREIGN_KEY_CHECKS=1;
+
+
+
 
